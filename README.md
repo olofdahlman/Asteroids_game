@@ -1,4 +1,5 @@
-# Asteroids_game, project made following BootDev course of the same name - project is incomplete and not functional
+# Asteroids_game, project made following BootDev course of the same name - the game is simple, the player controls the "ship" which is a triangle and shoots asteroids
+# If an asteroid collides with the player, it is game over - a and d keys turn the ship, w moves forward, s moves backwards and space shoots
 
 # This game uses the pygame library, it will not work without it
 # At the time of writing, the version imported is 2.6.0 (as noted in requirements.txt), which imports pip ver 24.3.1 alongside

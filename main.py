@@ -16,6 +16,8 @@ def main():
         screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #Defines the window of the game, aka the graphical user interface (GUI)
         fps = pygame.time.Clock()
         dt = 0
+        asteroids_destroyed = 0
+        time_alive = 0
         updatable = pygame.sprite.Group()
         drawable = pygame.sprite.Group()
         asteroids = pygame.sprite.Group()
@@ -34,24 +36,27 @@ def main():
         Asteroidfield1 = AsteroidField()
 
         while True:    #Infinite while loop - terminate with ctrl - C in terminal
-              for event in pygame.event.get():
+              for event in pygame.event.get():  #pygame specific function, this loop terminates the code when the game window is closed
                   if event.type == pygame.QUIT:
+                        print(f"Game closed! You destroyed {asteroids_destroyed} asteroids and lived for {int(time_alive / 60)} seconds!")
                         return
-              for object in updatable:    #Iterate over all the objects in the updatable list and call update on all 
-                    object.update(dt)
-              for object in asteroids:
-                  for shot in shots:
+              for object in updatable:    #Iterate over all the objects in the updatable list and call update on all - housekeeping functions mostly
+                    object.update(dt)     #This does track player input
+              for object in asteroids:    #Iterates over all the asteroids
+                  for shot in shots:      #Iterate over all the shots and see if any are colliding with asteroids
                        if object.collide(shot):
-                            object.split()
-                            shot.kill()
-                  if object.collide(player_sprite):
-                       print("Game over!")
-                       sys.exit(0)
-              screen.fill('black')
+                            asteroids_destroyed += 1  #Simple tracker to see how many asteroids the player destroyed
+                            object.split()      #If any shots hit asteroids, split them (unless they are too small) and destroy the original
+                            shot.kill()         #Remove the shot
+                  if object.collide(player_sprite):   #If the player hits an asteroid, it's game over
+                       print(f"Game over! You destroyed {asteroids_destroyed} asteroids, and lived for {int(time_alive / 60)} seconds!")
+                       sys.exit(0)        #Terminates code and closes the game window
+              screen.fill('black')        #All the other objects are white, so filling with black makes them visible
               for object in drawable:     #Iterate over all the objects in drawable list and draw all
-                  object.draw(screen)                    
-              pygame.display.flip()
-              dt = (fps.tick(60)/1000)
+                  object.draw(screen)     #In practice, this updates the display so the player can see and interact with the game
+              pygame.display.flip()       #Unsure of the details but it's related to refreshing the screen so the player can see it update
+              dt = (fps.tick(60)/1000)    #This makes the clock tic - set at 60 fps, which also means the game updates 60 times per second, meaning there are 60 tics per second
+              time_alive += 1             #Tics up once each tic, 60 tics means one second (unless the program runs too slowly to fit 60 tics in a second, which is very unlikely for this)
 
 
 

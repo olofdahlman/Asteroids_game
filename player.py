@@ -10,6 +10,9 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.cooldown = 0
+        self.lvlup_time = 8
+        self.lvlup_timer = 0
+        self.next_shot_timer = SHOT_COOLDOWN
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -31,7 +34,7 @@ class Player(CircleShape):
         self.position += facing * PLAYER_SPEED * dt
 
     def shoot(self):
-        self.cooldown = SHOT_COOLDOWN
+        self.cooldown = self.next_shot_timer
         vector = pygame.Vector2(0, 1)
         directional_vector = vector.rotate(self.rotation)
         velocity = directional_vector * SHOT_SPEED
@@ -40,7 +43,11 @@ class Player(CircleShape):
     def update(self, dt):
         keys = pygame.key.get_pressed()
         self.cooldown -= dt
-        
+        self.lvlup_timer += dt
+
+        if self.lvlup_timer >= self.lvlup_time: #Simple lvlup function I added, decreases the time between shots by 20% every 8 seconds
+            self.next_shot_timer /= 1.2
+            self.lvlup_timer = 0
         if keys[pygame.K_a]:
             self.rotate(-dt)
         if keys[pygame.K_d]:
