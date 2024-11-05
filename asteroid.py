@@ -1,6 +1,6 @@
 #This file contains the class for the asteroid npc/environment objects
 import pygame
-from circleshape import CircleShape
+from circleshape import *
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):

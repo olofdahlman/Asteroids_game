@@ -4,6 +4,7 @@
 #Use python3 main.py rather than ./main.py to start the program, close with ctrl-Cs
 
 import pygame
+import sys
 from constants import *
 from player import Player
 from asteroid import Asteroid
@@ -35,6 +36,10 @@ def main():
                         return
               for object in updatable:    #Iterate over all the objects in the updatable list and call update on all 
                     object.update(dt)
+              for object in asteroids:
+                  if object.collide(player_sprite):
+                       print("Game over!")
+                       sys.exit(0)
               screen.fill('black')
               for object in drawable:     #Iterate over all the objects in drawable list and draw all
                   object.draw(screen)                    
